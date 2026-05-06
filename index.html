@@ -143,6 +143,34 @@
             box-shadow: 0 15px 30px rgba(0, 229, 255, 0.6);
         }
 
+        /* Modal / Pop-up Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+
+        .modal-content {
+            background: #05192d; border: 1px solid var(--accent); padding: 40px;
+            border-radius: 28px; width: 90%; max-width: 500px; text-align: left;
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
+        }
+
+        @keyframes modalPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+        .modal-header-tag { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; margin-bottom: 5px; }
+        .student-name { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        
+        .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .score-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .score-box b { display: block; color: var(--accent); font-size: 0.65rem; text-transform: uppercase; }
+        
+        .pathway-result { padding: 15px; border-radius: 15px; text-align: center; font-size: 1.3rem; font-weight: 800; text-transform: uppercase; }
+        
+        .close-modal { margin-top: 25px; width: 100%; padding: 15px; background: transparent; border: 1px solid var(--glass-border); color: #fff; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+        .close-modal:hover { background: rgba(255,255,255,0.1); }
+
         #result-area {
             margin-top: 40px;
             padding-top: 30px;
@@ -154,28 +182,6 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-label {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-        }
-
-        .pathway-badge {
-            display: inline-block;
-            padding: 16px 32px;
-            border-radius: 15px;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--white);
-            background-color: var(--blue);
-            border: 2px solid rgba(255,255,255,0.4);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            text-transform: uppercase;
         }
 
         .loading-spinner {
@@ -214,7 +220,7 @@
 
     <div class="input-group">
         <label for="admNo">Enter Admission Number</label>
-        <input type="text" id="admNo" placeholder="RJSS/001JS/2026" spellcheck="false">
+        <input type="text" id="admNo" placeholder="RJSS/123JS/2026" spellcheck="false">
     </div>
     
     <button onclick="checkPathway()">Search Records</button>
@@ -224,10 +230,13 @@
             <div class="loading-spinner"></div>
             <p style="margin-top: 15px; font-weight: 800; color: var(--accent); letter-spacing: 1px;">QUERYING DATABASE...</p>
         </div>
-        <div id="display-container">
-            <div class="result-label">Identified Pathway</div>
-            <div id="display-pathway" class="pathway-badge"></div>
-        </div>
+    </div>
+</div>
+
+<!-- Results Pop-up Modal -->
+<div id="modalOverlay" class="modal-overlay">
+    <div id="modalContent" class="modal-content">
+        <!-- Content will be injected here by JavaScript -->
     </div>
 </div>
 
@@ -235,59 +244,99 @@
     async function checkPathway() {
         const rawInput = document.getElementById('admNo').value.trim().toUpperCase();
         const resultArea = document.getElementById('result-area');
-        const displayPathway = document.getElementById('display-pathway');
-        const displayContainer = document.getElementById('display-container');
         const loading = document.getElementById('loading');
+        const overlay = document.getElementById('modalOverlay');
+        const content = document.getElementById('modalContent');
 
         if (!rawInput) {
             alert("Input required: Please enter the Admission Number.");
             return;
         }
 
-        const hashedInput = sha1(rawInput);
+        // 1. Criteria Validation: RJSS/[3-5 Digits]JS/[Year]
+        const criteria = /^RJSS\/\d{3,5}JS\/\d{4}$/;
 
         resultArea.style.display = 'block';
         loading.style.display = 'block';
-        displayContainer.style.display = 'none';
 
-        try {
-            const response = await fetch('data.json');
-            if (!response.ok) throw new Error("Connection failed.");
-            
-            const data = await response.json();
-            const student = data.find(s => s.h === hashedInput);
-
-            setTimeout(() => {
+        setTimeout(async () => {
+            // Check criteria first
+            if (!criteria.test(rawInput)) {
                 loading.style.display = 'none';
-                displayContainer.style.display = 'block';
+                content.innerHTML = `
+                    <div class="error" style="text-align:center;">
+                        NO RECORDS FOUND<br>
+                        <span style="font-size: 0.8rem; font-weight: 400;">The admission number format is invalid.</span>
+                    </div>
+                    <button class="close-modal" onclick="closeModal()">Try Again</button>
+                `;
+                overlay.style.display = 'flex';
+                return;
+            }
+
+            const hashedInput = sha1(rawInput);
+
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error("Connection failed.");
+                
+                const data = await response.json();
+                const student = data.find(s => s.h === hashedInput);
+
+                loading.style.display = 'none';
 
                 if (student) {
-                    displayPathway.innerText = student.p;
-                    displayPathway.className = 'pathway-badge';
-                    
-                    if(student.p.toUpperCase().includes('STEM')) {
-                        displayPathway.style.backgroundColor = '#0074d9'; 
-                        displayPathway.style.color = '#ffffff';
-                    } else if(student.p.toUpperCase().includes('SOCIAL')) {
-                        displayPathway.style.backgroundColor = '#ff4136'; 
-                        displayPathway.style.color = '#ffffff';
-                    } else if(student.p.toUpperCase().includes('ARTS')) {
-                        displayPathway.style.backgroundColor = '#2ecc40'; 
-                        displayPathway.style.color = '#000b14';
-                    } else {
-                        displayPathway.style.backgroundColor = '#00e5ff'; 
-                        displayPathway.style.color = '#000b14';
-                    }
-                } else {
-                    displayContainer.innerHTML = `<div class="error">RECORD NOT FOUND<br><span style="font-size: 0.8rem; font-weight: 400;">Check the admission number and try again.</span></div>`;
-                }
-            }, 850);
+                    // Inject student data into modal
+                    content.innerHTML = `
+                        <div class="modal-header-tag">Admission Verified</div>
+                        <div style="color: var(--accent); font-weight: 800; font-size: 0.9rem;">${rawInput}</div>
+                        <div class="student-name">${student.n || 'Academic Report'}</div>
+                        
+                        <div class="modal-header-tag">Subject Performance</div>
+                        <div class="score-grid">
+                            ${Object.entries(student.sc || {}).map(([subject, score]) => `
+                                <div class="score-box">
+                                    <b>${subject}</b>
+                                    <span>${score}</span>
+                                </div>
+                            `).join('')}
+                        </div>
 
-        } catch (error) {
-            loading.style.display = 'none';
-            displayContainer.style.display = 'block';
-            displayContainer.innerHTML = `<div class="error">OFFLINE STATUS<br><span style="font-size: 0.8rem; font-weight: 400;">Ensure data.json is in the root folder.</span></div>`;
-        }
+                        <div class="modal-header-tag">Identified Pathway</div>
+                        <div class="pathway-result" style="background-color: ${getPathwayColor(student.p)};">
+                            ${student.p}
+                        </div>
+                        
+                        <button class="close-modal" onclick="closeModal()">Close Window</button>
+                    `;
+                    overlay.style.display = 'flex';
+                } else {
+                    content.innerHTML = `
+                        <div class="error" style="text-align:center;">
+                            NO RECORDS FOUND<br>
+                            <span style="font-size: 0.8rem; font-weight: 400;">Admission number not found in our system.</span>
+                        </div>
+                        <button class="close-modal" onclick="closeModal()">Close Window</button>
+                    `;
+                    overlay.style.display = 'flex';
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                alert("Offline Status: Ensure data.json is in the root folder.");
+            }
+        }, 800);
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('result-area').style.display = 'none';
+    }
+
+    function getPathwayColor(p) {
+        if(p.toUpperCase().includes('STEM')) return '#0074d9';
+        if(p.toUpperCase().includes('SOCIAL')) return '#ff4136';
+        if(p.toUpperCase().includes('ARTS')) return '#2ecc40';
+        return '#00e5ff';
     }
 </script>
 
