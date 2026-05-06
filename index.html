@@ -4,145 +4,293 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Portal | Rudan Junior Secondary</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Include SHA-1 Library for secure hashing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
+    
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #27ae60;
-            --bg-color: #f8f9fa;
+            /* High-Contrast Palette from index.php */
+            --navy: #000b14;
+            --blue: #0074d9;
+            --accent: #00e5ff; 
+            --red: #ff4136;
+            --green: #2ecc40;
+            --white: #ffffff;
+            
+            /* Enhanced Glassmorphism */
+            --glass-bg: rgba(0, 0, 0, 0.45); 
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--white);
+            /* Animated Background */
+            background: linear-gradient(-45deg, var(--navy), #0a2e52, #4d0000, #054d3b, #002e52);
+            background-size: 400% 400%;
+            animation: gradientMove 18s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .search-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            padding: 40px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             text-align: center;
         }
+
+        header {
+            margin-bottom: 30px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            font-weight: 800;
+            font-size: 2.2rem;
+            margin: 0;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        p { color: #666; font-size: 0.9rem; }
+
+        .subtitle {
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
         .input-group {
-            margin: 1.5rem 0;
+            margin: 30px 0 15px 0;
+            text-align: left;
         }
+
+        label {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+        }
+
         input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
             box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
         }
+
         input:focus {
-            border-color: var(--accent-color);
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
         }
+
         button {
             width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
+            padding: 18px;
+            background: var(--accent);
+            color: var(--navy);
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background 0.3s;
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
         }
+
         button:hover {
-            background-color: #1a252f;
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.5);
         }
+
+        button:active {
+            transform: translateY(0);
+        }
+
         #result-area {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid var(--glass-border);
             display: none;
+            animation: fadeIn 0.4s ease-out;
         }
-        .pathway-result {
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .pathway-badge {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 12px;
             font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            margin-top: 0.5rem;
+            font-weight: 800;
+            color: var(--white);
+            background-color: var(--blue);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
         }
+
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .error {
-            color: #e74c3c;
+            background-color: rgba(255, 65, 54, 0.2);
+            color: #ff8e87;
+            padding: 15px;
+            border-radius: 12px;
             font-size: 0.9rem;
+            font-weight: 700;
+            border: 1px solid var(--red);
         }
     </style>
 </head>
 <body>
 
 <div class="search-card">
-    <div class="logo">Rudan Junior Secondary</div>
-    <p>Check your child's Senior School Pathway</p>
+    <header>
+        <div class="logo">RUDAN JUNIOR</div>
+        <p class="subtitle">Enter your child's Admission Number to view their Elite Senior School Pathway.</p>
+    </header>
 
     <div class="input-group">
-        <input type="text" id="admNo" placeholder="Enter ADM No (e.g. RJSS/001JS/2026)">
+        <label for="admNo">Admission Number</label>
+        <input type="text" id="admNo" placeholder="e.g. RJSS/001JS/2026" spellcheck="false">
     </div>
     
-    <button onclick="checkPathway()">View Pathway</button>
+    <button onclick="checkPathway()">Search Pathway</button>
 
     <div id="result-area">
-        <div id="loading" style="display:none;">Searching...</div>
-        <div id="display-name" style="font-size: 0.8rem; color: #888;"></div>
-        <div id="display-pathway" class="pathway-result"></div>
+        <div id="loading" style="display:none;">
+            <div class="loading-spinner"></div>
+            <p style="margin-top: 15px; font-weight: 600; color: var(--accent);">ACCESSING REGISTRY...</p>
+        </div>
+        <div id="display-container">
+            <div class="result-label">Mapped Pathway</div>
+            <div id="display-pathway" class="pathway-badge"></div>
+        </div>
     </div>
 </div>
 
 <script>
     async function checkPathway() {
-        const input = document.getElementById('admNo').value.trim().toUpperCase();
+        const rawInput = document.getElementById('admNo').value.trim().toUpperCase();
         const resultArea = document.getElementById('result-area');
         const displayPathway = document.getElementById('display-pathway');
+        const displayContainer = document.getElementById('display-container');
         const loading = document.getElementById('loading');
 
-        if (!input) {
-            alert("Please enter an Admission Number.");
+        if (!rawInput) {
+            alert("Please enter your child's Admission Number.");
             return;
         }
 
-        // Show loading and clear previous results
+        const hashedInput = sha1(rawInput);
+
         resultArea.style.display = 'block';
         loading.style.display = 'block';
-        displayPathway.innerText = '';
+        displayContainer.style.display = 'none';
 
         try {
-            // Fetch the JSON file generated by your WAMP server
             const response = await fetch('data.json');
-            if (!response.ok) throw new Error("Data file not found.");
+            if (!response.ok) throw new Error("Connection failed.");
             
             const data = await response.json();
+            const student = data.find(s => s.h === hashedInput);
 
-            // Find the student in the array
-            const student = data.find(s => s.adm_no.toUpperCase() === input);
+            // Small delay for UX/Search feel
+            setTimeout(() => {
+                loading.style.display = 'none';
+                displayContainer.style.display = 'block';
 
-            loading.style.display = 'none';
+                if (student) {
+                    displayPathway.innerText = student.p;
+                    displayPathway.className = 'pathway-badge';
+                    
+                    // Logic for Dynamic Colors based on Pathway
+                    if(student.p.toUpperCase().includes('STEM')) {
+                        displayPathway.style.backgroundColor = '#0074d9'; // Blue
+                    } else if(student.p.toUpperCase().includes('SOCIAL')) {
+                        displayPathway.style.backgroundColor = '#ff4136'; // Red/Amber
+                    } else if(student.p.toUpperCase().includes('ARTS')) {
+                        displayPathway.style.backgroundColor = '#2ecc40'; // Green
+                        displayPathway.style.color = '#000b14';
+                    } else {
+                        displayPathway.style.backgroundColor = '#00e5ff'; // Cyan
+                        displayPathway.style.color = '#000b14';
+                    }
+                } else {
+                    displayContainer.innerHTML = `<div class="error">DATA NOT FOUND. Please verify the Admission Number format and try again.</div>`;
+                }
+            }, 800);
 
-            if (student) {
-                displayPathway.innerHTML = `Mapped Pathway:<br>${student.assigned_pathway}`;
-                displayPathway.classList.remove('error');
-            } else {
-                displayPathway.innerText = "Admission Number not found. Please check and try again.";
-                displayPathway.classList.add('error');
-            }
         } catch (error) {
             loading.style.display = 'none';
-            displayPathway.innerText = "System error. Please try again later.";
-            displayPathway.classList.add('error');
-            console.error(error);
+            displayContainer.style.display = 'block';
+            displayContainer.innerHTML = `<div class="error">SYSTEM OFFLINE. Database connection could not be established.</div>`;
         }
     }
 </script>
