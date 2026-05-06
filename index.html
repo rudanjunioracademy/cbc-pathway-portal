@@ -13,7 +13,7 @@
     
     <style>
         :root {
-            /* High-Contrast Palette from index.php */
+            /* High-Contrast Palette */
             --navy: #000b14;
             --blue: #0074d9;
             --accent: #00e5ff; 
@@ -21,10 +21,10 @@
             --green: #2ecc40;
             --white: #ffffff;
             
-            /* Enhanced Glassmorphism */
-            --glass-bg: rgba(0, 0, 0, 0.45); 
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --glass-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            /* Deeper Glassmorphism for better visibility */
+            --glass-bg: rgba(0, 0, 0, 0.65); /* Darker background for contrast */
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
         }
 
         body {
@@ -33,8 +33,8 @@
             padding: 20px;
             min-height: 100vh;
             color: var(--white);
-            /* Animated Background */
-            background: linear-gradient(-45deg, var(--navy), #0a2e52, #4d0000, #054d3b, #002e52);
+            /* Darker Gradient for text pop */
+            background: linear-gradient(-45deg, #000b14, #05192d, #330000, #022b21, #001a2e);
             background-size: 400% 400%;
             animation: gradientMove 18s ease infinite;
             display: flex;
@@ -50,25 +50,25 @@
 
         .search-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 24px;
+            backdrop-filter: blur(35px); /* Stronger blur */
+            -webkit-backdrop-filter: blur(35px);
+            border-radius: 28px;
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
-            padding: 40px;
+            padding: 50px 40px;
             width: 100%;
-            max-width: 450px;
+            max-width: 460px;
             text-align: center;
         }
 
         header {
-            margin-bottom: 30px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 35px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
         }
 
         .logo {
             font-weight: 800;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin: 0;
             letter-spacing: -1px;
             background: linear-gradient(to right, #fff, var(--accent));
@@ -78,116 +78,112 @@
 
         .subtitle {
             color: var(--accent);
-            font-weight: 600;
-            margin-top: 10px;
+            font-weight: 700;
+            margin-top: 12px;
             letter-spacing: 1px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            opacity: 0.9;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            text-transform: uppercase;
         }
 
         .input-group {
-            margin: 30px 0 15px 0;
+            margin: 35px 0 20px 0;
             text-align: left;
         }
 
         label {
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 0.75rem;
-            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            color: var(--white); /* White label for contrast */
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             display: block;
         }
 
         input {
             width: 100%;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.4); /* Darker input bg */
             border: 2px solid var(--glass-border);
-            border-radius: 12px;
+            border-radius: 14px;
             color: #fff;
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 700;
             box-sizing: border-box;
             transition: all 0.3s ease;
         }
 
         input:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.6);
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
         }
 
         button {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             background: var(--accent);
             color: var(--navy);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 800;
+            font-size: 1.1rem;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.4);
         }
 
         button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.5);
-        }
-
-        button:active {
-            transform: translateY(0);
+            transform: translateY(-3px);
+            filter: brightness(1.15);
+            box-shadow: 0 15px 30px rgba(0, 229, 255, 0.6);
         }
 
         #result-area {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid var(--glass-border);
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--glass-border);
             display: none;
             animation: fadeIn 0.4s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .result-label {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
         }
 
         .pathway-badge {
             display: inline-block;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 1.2rem;
+            padding: 16px 32px;
+            border-radius: 15px;
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--white);
             background-color: var(--blue);
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255,255,255,0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
 
         .loading-spinner {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid var(--accent);
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--accent);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
@@ -198,13 +194,13 @@
         }
 
         .error {
-            background-color: rgba(255, 65, 54, 0.2);
-            color: #ff8e87;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            border: 1px solid var(--red);
+            background-color: rgba(255, 65, 54, 0.3);
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            border: 2px solid var(--red);
         }
     </style>
 </head>
@@ -213,23 +209,23 @@
 <div class="search-card">
     <header>
         <div class="logo">RUDAN JUNIOR</div>
-        <p class="subtitle">Enter your child's Admission Number to view their Elite Senior School Pathway.</p>
+        <p class="subtitle">Elite Senior School Pathway</p>
     </header>
 
     <div class="input-group">
-        <label for="admNo">Admission Number</label>
-        <input type="text" id="admNo" placeholder="e.g. RJSS/001JS/2026" spellcheck="false">
+        <label for="admNo">Enter Admission Number</label>
+        <input type="text" id="admNo" placeholder="RJSS/001JS/2026" spellcheck="false">
     </div>
     
-    <button onclick="checkPathway()">Search Pathway</button>
+    <button onclick="checkPathway()">Search Records</button>
 
     <div id="result-area">
         <div id="loading" style="display:none;">
             <div class="loading-spinner"></div>
-            <p style="margin-top: 15px; font-weight: 600; color: var(--accent);">ACCESSING REGISTRY...</p>
+            <p style="margin-top: 15px; font-weight: 800; color: var(--accent); letter-spacing: 1px;">QUERYING DATABASE...</p>
         </div>
         <div id="display-container">
-            <div class="result-label">Mapped Pathway</div>
+            <div class="result-label">Identified Pathway</div>
             <div id="display-pathway" class="pathway-badge"></div>
         </div>
     </div>
@@ -244,7 +240,7 @@
         const loading = document.getElementById('loading');
 
         if (!rawInput) {
-            alert("Please enter your child's Admission Number.");
+            alert("Input required: Please enter the Admission Number.");
             return;
         }
 
@@ -261,7 +257,6 @@
             const data = await response.json();
             const student = data.find(s => s.h === hashedInput);
 
-            // Small delay for UX/Search feel
             setTimeout(() => {
                 loading.style.display = 'none';
                 displayContainer.style.display = 'block';
@@ -270,27 +265,28 @@
                     displayPathway.innerText = student.p;
                     displayPathway.className = 'pathway-badge';
                     
-                    // Logic for Dynamic Colors based on Pathway
                     if(student.p.toUpperCase().includes('STEM')) {
-                        displayPathway.style.backgroundColor = '#0074d9'; // Blue
+                        displayPathway.style.backgroundColor = '#0074d9'; 
+                        displayPathway.style.color = '#ffffff';
                     } else if(student.p.toUpperCase().includes('SOCIAL')) {
-                        displayPathway.style.backgroundColor = '#ff4136'; // Red/Amber
+                        displayPathway.style.backgroundColor = '#ff4136'; 
+                        displayPathway.style.color = '#ffffff';
                     } else if(student.p.toUpperCase().includes('ARTS')) {
-                        displayPathway.style.backgroundColor = '#2ecc40'; // Green
+                        displayPathway.style.backgroundColor = '#2ecc40'; 
                         displayPathway.style.color = '#000b14';
                     } else {
-                        displayPathway.style.backgroundColor = '#00e5ff'; // Cyan
+                        displayPathway.style.backgroundColor = '#00e5ff'; 
                         displayPathway.style.color = '#000b14';
                     }
                 } else {
-                    displayContainer.innerHTML = `<div class="error">DATA NOT FOUND. Please verify the Admission Number format and try again.</div>`;
+                    displayContainer.innerHTML = `<div class="error">RECORD NOT FOUND<br><span style="font-size: 0.8rem; font-weight: 400;">Check the admission number and try again.</span></div>`;
                 }
-            }, 800);
+            }, 850);
 
         } catch (error) {
             loading.style.display = 'none';
             displayContainer.style.display = 'block';
-            displayContainer.innerHTML = `<div class="error">SYSTEM OFFLINE. Database connection could not be established.</div>`;
+            displayContainer.innerHTML = `<div class="error">OFFLINE STATUS<br><span style="font-size: 0.8rem; font-weight: 400;">Ensure data.json is in the root folder.</span></div>`;
         }
     }
 </script>
